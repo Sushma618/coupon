@@ -8,8 +8,7 @@ function App() {
 
   const getCoupon = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/get-coupon'); // ✅ Connect to backend
-      
+      const response = await axios.get('/api/get-coupon'); // ✅ Use relative path
       setCoupon(response.data.coupon);
       setError(null);
     } catch (err) {
