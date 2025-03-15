@@ -36,3 +36,129 @@
     transform: rotate(360deg);
   }
 }
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.app-header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 2.5rem;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  margin: 1rem 0 0;
+  font-size: 1.1rem;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.coupon-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.claim-section {
+  padding: 2rem 0;
+}
+
+.claim-button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.claim-button:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.claim-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.coupon-card {
+  padding: 1rem;
+}
+
+.coupon-card h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.coupon-code {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  letter-spacing: 2px;
+  margin: 1rem 0;
+  border: 2px dashed #3498db;
+}
+
+.success-message {
+  color: #27ae60;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fdf0ef;
+  border-radius: 6px;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #7f8c8d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .coupon-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .coupon-code {
+    font-size: 1.2rem;
+  }
+}

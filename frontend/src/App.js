@@ -1,50 +1,78 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Coupon from './components/Coupon';
+import './App.css';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function App() {
   const [coupon, setCoupon] = useState(null);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getCoupon = async () => {
+  const claimCoupon = async () => {
     try {
-      const response = await axios.get('/api/get-coupon'); // ✅ Use relative path
-      setCoupon(response.data.coupon);
+      setIsLoading(true);
       setError(null);
+      setMessage('');
+      
+      const response = await axios.get(`${API_URL}/api/get-coupon`, {
+        withCredentials: true
+      });
+
+      if (response.data.success) {
+        setCoupon(response.data.coupon);
+        setMessage(response.data.message);
+      }
     } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred while claiming the coupon.');
       setCoupon(null);
-      setError(err.response?.data?.message || 'An error occurred');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h1>Round Robin Coupon Distribution</h1>
-      <button onClick={getCoupon} style={styles.button}>Get Coupon</button>
-      {coupon && <Coupon code={coupon} />}
-      {error && <p style={styles.error}>{error}</p>}
+    <div className="app">
+      <header className="app-header">
+        <h1>🎟️ Coupon Distribution System</h1>
+        <p className="subtitle">Claim your exclusive coupon below!</p>
+      </header>
+
+      <main className="main-content">
+        <div className="coupon-container">
+          {coupon ? (
+            <div className="coupon-card">
+              <h2>Your Coupon Code:</h2>
+              <div className="coupon-code">{coupon}</div>
+              <p className="success-message">{message}</p>
+            </div>
+          ) : (
+            <div className="claim-section">
+              <button 
+                onClick={claimCoupon} 
+                disabled={isLoading}
+                className="claim-button"
+              >
+                {isLoading ? 'Claiming...' : 'Claim Your Coupon'}
+              </button>
+            </div>
+          )}
+
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+        </div>
+      </main>
+
+      <footer className="app-footer">
+        <p>One coupon per user. Please wait 1 hour between claims.</p>
+      </footer>
     </div>
   );
 }
 
-const styles = {
-  container: {
-    fontFamily: 'Arial, sans-serif',
-    textAlign: 'center',
-    marginTop: '50px',
-  },
-  button: {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    padding: '10px 20px',
-    margin: '10px',
-    border: 'none',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
-  error: {
-    color: 'red',
-  },
-};
-
 export default App;
+
