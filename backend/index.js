@@ -86,19 +86,17 @@ function canUserClaimCoupon(ip, lastClaimTime) {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'healthy' });
+    res.json({ status: 'healthy', timestamp: Date.now() });
 });
 
 // Coupon claim endpoint
 app.get('/api/get-coupon', (req, res) => {
     try {
-        // Get the real IP address from various headers
+        // Get the real IP address
         const ip = req.headers['x-forwarded-for']?.split(',')[0] || 
                   req.headers['x-real-ip'] || 
                   req.connection.remoteAddress;
                   
-        console.log('Client IP:', ip); // Debug log
-        
         const lastClaimTime = req.cookies.lastClaimTime;
         const claimCheck = canUserClaimCoupon(ip, lastClaimTime);
 
@@ -113,7 +111,7 @@ app.get('/api/get-coupon', (req, res) => {
         const now = Date.now();
         userClaims.set(ip, now);
         
-        // Set cookie specific to this IP
+        // Set cookie
         res.cookie('lastClaimTime', now.toString(), {
             maxAge: 3600000,
             httpOnly: true,
@@ -122,8 +120,9 @@ app.get('/api/get-coupon', (req, res) => {
             path: '/'
         });
 
+        // Get and send coupon immediately
         const coupon = getNextCoupon();
-        res.json({
+        return res.json({
             success: true,
             coupon,
             message: 'Coupon claimed successfully!'
@@ -131,7 +130,7 @@ app.get('/api/get-coupon', (req, res) => {
 
     } catch (error) {
         console.error('Error in coupon claim:', error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'An error occurred while processing your request.'
         });
